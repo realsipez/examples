@@ -1,0 +1,6 @@
+rootProject.name = 'Microservices-Saga'
+
+include(':Eureka')
+include(':Gateway')
+include(':Order')
+include(':Payment')
