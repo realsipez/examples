@@ -1,1 +1,2 @@
-# Java Projects Examples ![](java.svg)
+# Java Projects Examples
+![](java.svg)
