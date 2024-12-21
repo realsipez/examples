@@ -1,0 +1,117 @@
+version: "3.3"
+services:
+  db:
+    image: mysql
+    container_name: mysqlDB
+    ports:
+      - "3307:3307"
+    expose:
+      - 3307
+    volumes:
+      - my-db:/var/lib/mysql
+    environment:
+      MYSQL_USER: Sina
+      MYSQL_PASSWORD: abcd1234
+      MYSQL_ROOT_PASSWORD: Sp@123456789
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  eureka:
+    build: Eureka
+    entrypoint: java -jar Eureka-1.0.0.jar
+    ports:
+      - "8761:8761"
+    container_name: eureka
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  gateway:
+    build: Gateway
+    container_name: gateway
+    ports:
+      - "7070:7070"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on: [ eureka ]
+    networks:
+      - OnlineStore
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  order:
+    build: Order
+    ports:
+      - "8080:8080"
+    container_name: order
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+    depends_on: [ db, eureka ]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  product:
+    build: Product
+    ports:
+      - "8081:8081"
+    container_name: product
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+    depends_on: [ db, eureka ]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  discount:
+    build: Payment
+    ports:
+      - "8082:8082"
+    container_name: payment
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+    depends_on: [ db, eureka ]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  clients:
+    build: Client
+    ports:
+      - "8083:8083"
+    container_name: Client
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - OnlineStore
+    depends_on: [ eureka ]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+volumes:
+  my-db:
+
+networks:
+  default:
+  OnlineStore:
+    driver: bridge

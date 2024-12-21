@@ -1,0 +1,8 @@
+subprojects {
+    group = 'me.sina.onlinestore'
+    version = '1.0.0'
+
+    repositories {
+        mavenCentral()
+    }
+}

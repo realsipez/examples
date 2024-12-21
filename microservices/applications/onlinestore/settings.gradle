@@ -1,0 +1,8 @@
+rootProject.name = 'OnlineStore'
+
+include(':Eureka')
+include(':Gateway')
+include(':Client')
+include(':Product')
+include(':Order')
+include(':Payment')
